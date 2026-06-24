@@ -1,64 +1,29 @@
 using System;
 using System.Globalization;
 
-try
+class Program
 {
-    var now = DateTime.Now;
-
-    // Safely get culture info
-    string cultureName;
-    string cultureEnglishName;
-    try
+    static void Main()
     {
         var culture = CultureInfo.CurrentCulture;
-        cultureName = culture?.Name ?? "(unknown)";
-        cultureEnglishName = culture?.EnglishName ?? "(unknown)";
+        RegionInfo region;
+
+        // Try to get the current region; fall back to creating one from the culture name if needed.
+        try
+        {
+            region = RegionInfo.CurrentRegion;
+        }
+        catch
+        {
+            region = new RegionInfo(culture.Name);
+        }
+
+        var now = DateTime.Now;
+
+        Console.WriteLine($"Region: {region.DisplayName} ({region.Name})");
+        Console.WriteLine($"Year: {now.Year}");
+        Console.WriteLine($"Month: {culture.DateTimeFormat.GetMonthName(now.Month)} ({now.Month})");
+        Console.WriteLine($"Weekday: {culture.DateTimeFormat.GetDayName(now.DayOfWeek)}");
+        Console.WriteLine($"Time of day: {now:HH:mm:ss}");
     }
-    catch (Exception)
-    {
-        cultureName = "(unknown)";
-        cultureEnglishName = "(unknown)";
-    }
-
-    // Safely get region info (RegionInfo.CurrentRegion can throw in some environments)
-    string regionDisplay;
-    string regionName;
-    try
-    {
-        var region = RegionInfo.CurrentRegion;
-        regionDisplay = region?.DisplayName ?? "Unknown region";
-        regionName = region?.Name ?? "??";
-    }
-    catch (Exception)
-    {
-        regionDisplay = "Unknown region";
-        regionName = "??";
-    }
-
-    Console.WriteLine("Application started - current region and date/time:");
-    Console.WriteLine();
-
-    Console.WriteLine($"Region: {regionDisplay} ({regionName})");
-    Console.WriteLine($"Culture: {cultureName} - {cultureEnglishName}");
-    Console.WriteLine();
-
-    Console.WriteLine($"Year: {now:yyyy}");
-    Console.WriteLine($"Month: {now:MMMM} ({now:MM})");
-    Console.WriteLine($"Weekday: {now:dddd}");
-    Console.WriteLine($"Time of day: {now:HH:mm:ss}");
-    Console.WriteLine();
-
-    // Keep console open only for interactive user sessions
-    if (Environment.UserInteractive)
-    {
-        Console.WriteLine("Press Enter to exit...");
-        Console.ReadLine();
-    }
-
-    return 0;
-}
-catch (Exception ex)
-{
-    Console.Error.WriteLine($"Unexpected error: {ex.Message}");
-    return 1;
 }
