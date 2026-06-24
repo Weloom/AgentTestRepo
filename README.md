@@ -1,14 +1,1 @@
-# AgentTestRepo
-Used only to test agentic update of sourcecode based on raised issues
-
-## Run
-
-To run the console app:
-
-1. Ensure .NET 6.0 (or compatible) SDK is installed
-2. Restore and run:
-
-```bash
-dotnet restore
-dotnet run
-```
+This repo contains a tiny console app. Feature branch 'feature/show-time-region' displays region and date/time on startup.
